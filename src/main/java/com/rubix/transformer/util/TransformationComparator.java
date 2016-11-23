@@ -16,6 +16,6 @@ public class TransformationComparator implements Comparator {
         Transformation transformation2 = (Transformation) o2;
 
         // FIXME: 18/11/16
-        return transformation2.getSource().getName().compareTo(transformation1.getSource().getName());
+        return transformation1.getSource().getName().compareTo(transformation2.getSource().getName());
     }
 }

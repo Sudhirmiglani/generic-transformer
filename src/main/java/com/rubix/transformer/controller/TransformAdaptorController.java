@@ -1,6 +1,8 @@
 package com.rubix.transformer.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rubix.transformer.builder.TransformAdaptorBuilder;
+import com.rubix.transformer.component.TransformerComponent;
 import com.rubix.transformer.pojo.TransformAdaptor;
 import com.rubix.wms.common.controller.AbstractController;
 import com.rubix.wms.common.util.ErrorMessageUtil;
@@ -11,13 +13,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -32,6 +32,8 @@ public class TransformAdaptorController extends AbstractController<TransformAdap
 
     private final TransformAdaptorBuilder builder;
 
+    private final TransformerComponent transformerComponent;
+
     private final ErrorMessagesFactory errorMessagesFactory;
 
     private final static Log log = LogFactory.getLog(TransformAdaptorController.class);
@@ -40,7 +42,6 @@ public class TransformAdaptorController extends AbstractController<TransformAdap
     @RequestMapping(method = {RequestMethod.POST})
     public ResponseEntity<?> save(@RequestBody @NonNull final TransformAdaptor transformAdaptor) {
         final ErrorMessages errorMessage = errorMessagesFactory.createErrorMessage(transformAdaptor);
-        //monitorValidator.validate(transformAdaptor, errorMessage);
 
         if (errorMessage.hasErrors()) {
             final String message = errorMessage.getFormattedError();
@@ -49,5 +50,19 @@ public class TransformAdaptorController extends AbstractController<TransformAdap
         }
         return super.save(transformAdaptor);
     }
+
+    @RequestMapping(path = "/transform/{transformId}", method = {RequestMethod.POST})
+    public ResponseEntity<?> transform(@PathVariable("transformId") final Long id, @RequestBody @NonNull final String json) {
+
+        try {
+            final JSONObject jsonObject = new JSONObject(json);
+            final JSONObject transformedJson = transformerComponent.transform(jsonObject, id);
+            return new ResponseEntity<>(transformedJson.toString(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(e);
+            return new ResponseEntity<>(ErrorMessageUtil.get(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }

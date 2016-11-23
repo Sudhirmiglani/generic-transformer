@@ -9,6 +9,7 @@ import com.rubix.transformer.pojo.Field;
 import com.rubix.transformer.pojo.TransformAdaptor;
 import com.rubix.transformer.pojo.Transformation;
 import com.rubix.transformer.transformer.TransformAdaptorTransformer;
+import com.rubix.transformer.util.BinarySearchTree;
 import com.rubix.transformer.util.TransformationComparator;
 import com.rubix.wms.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ import java.util.*;
  */
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class TransformerImpl implements Transformer {
+public class TransformerComponentImpl implements TransformerComponent {
 
     private final TransformDao transformDao;
 
@@ -59,13 +60,13 @@ public class TransformerImpl implements Transformer {
 
     private Map<String, String> getSourceToDestinationMappings(final List<Transformation> transformations) {
         Map<String, String> sourceDestinationMapping = new HashMap<>();
+        BinarySearchTree binarySearchTree = new BinarySearchTree();
         transformations.forEach((transformation) -> {
             final Field source = transformation.getSource();
             final Field destination = transformation.getDestination();
-
-            //sourceDestinationMapping.put(source.getName(), destination.getName());
+            binarySearchTree.insert(source.getName(), destination.getName());
         });
-        sourceDestinationMapping.put("arr.arr", "anotherDummies.list");
+        sourceDestinationMapping = binarySearchTree.getAllLeaveNodes();
         return sourceDestinationMapping;
     }
 
@@ -77,19 +78,6 @@ public class TransformerImpl implements Transformer {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-//        for (Transformation transformation : transformations){
-//            String field = transformation.getSource().getName();
-//            JSONObject j = getJsonObjectByNestedProperty(jsonObject, field);
-//            if (j != null && sourceDestinationMapping.containsKey(field)) {
-//                String arr[] =  field.split("\\.");
-//                try {
-//                    j.put(arr[arr.length-1], sourceDestinationMapping.get(field));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
 
         traverseInputJson(inputJson, jsonObject, sourceDestinationMapping, "");
         return inputJson;
@@ -134,12 +122,6 @@ public class TransformerImpl implements Transformer {
                 e.printStackTrace();
             }
         }
-
-//        try {
-//            jsonObject =  inputJson.get(nodes[i]);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
         return jsonObject;
     }
 

@@ -4,6 +4,7 @@ import com.rubix.transformer.builder.PayloadTypeBuilder;
 import com.rubix.transformer.builder.TransformAdaptorBuilder;
 import com.rubix.transformer.pojo.PayloadType;
 import com.rubix.transformer.pojo.TransformAdaptor;
+import com.rubix.transformer.processor.PayloadProcessor;
 import com.rubix.wms.common.builder.Builder;
 import com.rubix.wms.common.controller.AbstractController;
 import com.rubix.wms.common.util.ErrorMessageUtil;
@@ -34,16 +35,19 @@ public class PayloadTypeController extends AbstractController<PayloadType, Long>
 
     private final PayloadTypeBuilder builder;
 
+    private final PayloadProcessor payloadProcessor;
+
     private final static Log log = LogFactory.getLog(PayloadTypeController.class);
 
-//    @RequestMapping(path = "/load", method = RequestMethod.GET)
-//    public ResponseEntity<?> loadClassed(@RequestBody @NonNull final List<String> classNames) {
-//        try {
-//            //return new ResponseEntity<>(getBuilder().saveAll(classNames), HttpStatus.OK);
-//        } catch (Exception e) {
-//            log.error(e);
-//            return new ResponseEntity<>(ErrorMessageUtil.get(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @RequestMapping(path = "/load", method = RequestMethod.POST)
+    public ResponseEntity<?> loadClasses(@RequestBody @NonNull final List<String> classNames) {
+        try {
+            payloadProcessor.persistJsonSchema(classNames);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            log.error(e);
+            return new ResponseEntity<>(ErrorMessageUtil.get(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }

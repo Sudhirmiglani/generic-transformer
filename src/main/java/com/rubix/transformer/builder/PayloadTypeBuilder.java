@@ -29,6 +29,4 @@ public class PayloadTypeBuilder extends AbstractBuilder<MPayloadType, PayloadTyp
 
     private final SpecificationBuilder specificationBuilder;
 
-
-
 }

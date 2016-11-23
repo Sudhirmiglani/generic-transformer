@@ -41,6 +41,19 @@ public class PayloadProcessor {
         }
     }
 
+    public void persistJsonSchema(List<String> classes) {
+
+        ClassLoader classLoader = PayloadProcessor.class.getClassLoader();
+        for (String className : classes) {
+            try {
+                Class aClass = classLoader.loadClass(className);
+                loadSchema(aClass);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void loadSchema(Class clazz) {
         try {
             ObjectMapper mapper = new ObjectMapper();
