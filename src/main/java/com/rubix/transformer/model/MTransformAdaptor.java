@@ -26,13 +26,9 @@ public class MTransformAdaptor {
     @SequenceGenerator(name = "transform-adaptor-id-generator", sequenceName = "transform_adaptor_id_generator", allocationSize = 1)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     private MPayloadType sourcePayloadType;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private MPayloadType destinationPayloadType;
-
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    @JoinTable
     private List<MTransformation> transformations;
 }

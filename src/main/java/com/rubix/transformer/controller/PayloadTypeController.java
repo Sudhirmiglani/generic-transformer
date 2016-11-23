@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * Created by sudhir.m on 15/11/16.
  */
@@ -33,4 +35,15 @@ public class PayloadTypeController extends AbstractController<PayloadType, Long>
     private final PayloadTypeBuilder builder;
 
     private final static Log log = LogFactory.getLog(PayloadTypeController.class);
+
+//    @RequestMapping(path = "/load", method = RequestMethod.GET)
+//    public ResponseEntity<?> loadClassed(@RequestBody @NonNull final List<String> classNames) {
+//        try {
+//            //return new ResponseEntity<>(getBuilder().saveAll(classNames), HttpStatus.OK);
+//        } catch (Exception e) {
+//            log.error(e);
+//            return new ResponseEntity<>(ErrorMessageUtil.get(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
 }

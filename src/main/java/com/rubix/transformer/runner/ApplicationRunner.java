@@ -37,42 +37,29 @@ public class ApplicationRunner implements CommandLineRunner {
     public void run(String... strings) throws Exception {
         Class[] classes = {Dummy.class};
 
+        JSONArray jsonArray = new JSONArray();
+        List<String> list = new ArrayList<>();
+        list.add("A");
+        list.add("B");
+        jsonArray.put(list);
+
+        JSONObject j2 = new JSONObject();
+        j2.put("arr", jsonArray);
+
+        JSONObject j1= new JSONObject();
+        j1.put("arr", j2);
+
+
+        System.out.println(j1);
         JSONObject jsonObject = new JSONObject()
-                .put("xId", 1)
+                .put("arr", jsonArray)
                 .put("str", "sjhd")
                 .put("bool", false);
 
-        transformer.transform(jsonObject, 1L);
+        System.out.println(transformer.transform(j1, 2L));
 
         //payloadProcessor.persistJsonSchema(classes);
 
-//        JSONObject jsonObject = new JSONObject()
-//                .put("rating", new JSONObject()
-//                        .put("primary", new JSONObject()
-//                                .put("values", 3))
-//                        .put("quality", new JSONObject()
-//                                .put("values", 3)));
-//
-//        System.out.println(jsonObject);
-//
-//
-//        JSONArray jsonArray = new JSONArray()
-//                .put(new JSONObject()
-//                        .put("operation", "shift")
-//                        .put("spec", new JSONObject()
-//                                .put("rating", new JSONObject()
-//                                        .put("primary", new JSONObject()
-//                                                .put("values", "RATING")))));
-//
-//
-//        List chainrSpecJSON = JsonUtils.jsonToList(jsonArray.toString());
-//        Chainr chainr = Chainr.fromSpec(chainrSpecJSON);
-//
-//        Object inputJSON = JsonUtils.jsonToObject(jsonObject.toString());
-//
-//        Object output = chainr.transform(inputJSON);
-//
-//        System.out.println(output);
     }
 
 }

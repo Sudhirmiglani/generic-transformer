@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
  */
 public interface Transformer {
 
-    void transform(JSONObject jsonObject, Long adaptorId) throws Exception;
+    JSONObject transform(JSONObject jsonObject, Long adaptorId) throws Exception;
 
 }

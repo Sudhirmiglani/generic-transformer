@@ -31,7 +31,6 @@ public class MPayloadType {
     @Column(nullable = false)
     private Long version;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    @JoinTable
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<MField> fields;
 }

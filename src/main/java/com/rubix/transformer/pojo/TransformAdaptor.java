@@ -22,6 +22,4 @@ public class TransformAdaptor {
 
     private PayloadType sourcePayloadType;
 
-    private PayloadType destinationPayloadType;
-
 }

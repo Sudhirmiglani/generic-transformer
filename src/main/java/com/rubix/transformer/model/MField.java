@@ -1,5 +1,6 @@
 package com.rubix.transformer.model;
 
+import com.rubix.transformer.pojo.PayloadType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,5 +30,7 @@ public class MField {
 
     @Column(name = "is_internal")
     private Boolean isInternal;
+
+    //private PayloadType payloadType;
 
 }
